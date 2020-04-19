@@ -43,7 +43,11 @@ function StartCoffinDance(type)
 	end				
 	local coords = GetEntityCoords(playerPed)
 	if Config.PlayMusic then
-		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 8.0, 'CoffinDance', 0.2)
+		if Config.PlayMusicOnlyOnSelf then
+			TriggerServerEvent('InteractSound_SV:PlayOnSource', 'CoffinDance', 0.2)
+		else
+			TriggerServerEvent('InteractSound_SV:PlayWithinDistance', Config.PlayMusicDistance, 'CoffinDance', 0.2)
+		end
 	end
 	if type == "Death" then
 		Wait(1000)
@@ -59,6 +63,7 @@ function StartCoffinDance(type)
 	ped5 = CreatePed(4, pedModel, coords.x+0.5, coords.y+1, coords.z, 3374176, false, true)
 	ped6 = CreatePed(4, pedModel, coords.x+1, coords.y+0.5, coords.z, 3374176, false, true)
 	coffin = CreateObject(coffinModel, 1.0, 1.0, 1.0, 1, 1, 0)	
+	SetEntityNoCollisionEntity(coffin, PlayerPedId())
 	SetPedState(mainPed);SetPedState(ped);SetPedState(ped2);SetPedState(ped3);SetPedState(ped4)
 	PedDancing(ped);PedDancing(ped2);PedDancing(ped3);PedDancing(ped4);PedDancing(ped5);PedDancing(ped6)
 	Citizen.Wait(200)
@@ -82,6 +87,7 @@ function StartCoffinDance(type)
 end
 
 function EndCoffinDance()
+	SetEntityVisible(coffin, false, false)
 	DeleteEntity(coffin)
 	DeleteEntity(mainPed);DeleteEntity(ped);DeleteEntity(ped2);DeleteEntity(ped3);DeleteEntity(ped4);DeleteEntity(ped5);DeleteEntity(ped6)
 end
@@ -89,7 +95,7 @@ end
 function SetPedState(thePed)
 	local playerPed = PlayerId()	
 	local GroupHandle = GetPlayerGroup(PlayerId())
-	SetEntityNoCollisionEntity(thePed, PlayerPedId(), false)
+	SetEntityNoCollisionEntity(thePed, PlayerPedId())
 	SetEntityInvincible(thePed, true)
 	SetPedCanBeTargetted(thePed, false)
 	SetBlockingOfNonTemporaryEvents(thePed, true)
