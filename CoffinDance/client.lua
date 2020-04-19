@@ -92,7 +92,7 @@ AddEventHandler('CoffinDance:SpawnPeds', function(coords, type, coffNet, pedNet,
 		ped = NetToPed(globalPedNet); ped2 = NetToPed(globalPedNet2); ped3 = NetToPed(globalPedNet3); ped4 = NetToPed(globalPedNet4); ped5 = NetToPed(globalPedNet5); ped6 = NetToPed(globalPedNet6)				
 		mainPed = NetToPed(globalMainPed)
 		SetEntityVisible(mainPed, false, false)
-		SetPedState(mainPed);SetPedState(ped);SetPedState(ped2);SetPedState(ped3);SetPedState(ped4)
+		SetPedState(mainPed);SetPedState(ped);SetPedState(ped2);SetPedState(ped3);SetPedState(ped4);SetPedState(ped5);SetPedState(ped6)
 		PedDancing(ped);PedDancing(ped2);PedDancing(ped3);PedDancing(ped4);PedDancing(ped5);PedDancing(ped6)			
 		Citizen.Wait(200)	
 		AttachEntityToEntity(coffin, mainPed, 28422, 0.0, -1.05, 0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)
