@@ -43,7 +43,7 @@ function StartCoffinDance(type)
 	end				
 	local coords = GetEntityCoords(playerPed)
 	if Config.PlayMusic then
-		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 8.0, 'CoffinDance', 0.5)
+		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 8.0, 'CoffinDance', 0.2)
 	end
 	if type == "Death" then
 		Wait(1000)
