@@ -74,7 +74,7 @@ function StartCoffinDance(type)
 	if type == "Death" then				
 		local coords = GetEntityCoords(playerPed)
 		SetEntityCoords(mainPed, coords.x, coords.y, coords.z, 3374176)
-		if not Config.MusicEndAutoClear then
+		if Config.MusicEndAutoClear then
 			Wait(15000)
 			EndCoffinDance()
 		end
