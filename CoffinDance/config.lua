@@ -3,7 +3,7 @@ Config = {}
 Config.StartWhenDeath = true
 Config.EnableCommand = true
 Config.PlayMusic = true -- need InteractSound script: https://github.com/plunkettscott/interact-sound
-Config.MusicEndAutoClear = true -- if false then cleared when revive
+Config.AutoClearWhenMusicEnd = true -- if false then only cleared when revive
 Config.PlayMusicOnlyOnSelf = false -- if false will play music in distance
 Config.PlayMusicDistance = 8.0 -- Config.PlayMusicOnlyOnSelf need true
 
