@@ -37,7 +37,9 @@ Citizen.CreateThread(function()
 				StartCoffinDance("Death")			
 			elseif (isDead and NetworkIsPlayerActive(PlayerId()) and not IsPedFatallyInjured(PlayerPedId())) and not Config.AutoClearWhenMusicEnd then
 				isDead = false	
-				TriggerServerEvent("CoffinDance:syncEndCoffinDance", globalCoffNet, globalPedNet, globalPedNet2, globalPedNet3, globalPedNet4, globalPedNet5, globalPedNet6, globalMainPed)		
+				if not Config.AutoClearWhenMusicEnd then
+					TriggerServerEvent("CoffinDance:syncEndCoffinDance", globalCoffNet, globalPedNet, globalPedNet2, globalPedNet3, globalPedNet4, globalPedNet5, globalPedNet6, globalMainPed)		
+				end
 			end
 		end
 	end
