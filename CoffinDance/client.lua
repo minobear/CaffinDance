@@ -12,7 +12,7 @@ if Config.EnableCommand then
 					TriggerServerEvent('InteractSound_SV:PlayWithinDistance', Config.PlayMusicDistance, 'CoffinDance', 0.2)
 				end
 			end				
-			StartCoffinDance("Command")					
+			StartCoffinDance("Command")
 		else
 			commState = false
 			TriggerServerEvent("CoffinDance:syncEndCoffinDance", globalCoffNet, globalPedNet, globalPedNet2, globalPedNet3, globalPedNet4, globalPedNet5, globalPedNet6, globalMainPed)
@@ -22,6 +22,16 @@ end
 
 
 Citizen.CreateThread(function()
+	local pedModel = GetHashKey(Config.DancerPedModel)
+	local coffinModel = GetHashKey(Config.CoffinModel)		
+	RequestModel(coffinModel)
+	while not HasModelLoaded(coffinModel) do
+		Citizen.Wait(1)
+	end		
+	RequestModel(pedModel)
+	while not HasModelLoaded(pedModel) do
+		Citizen.Wait(1)
+	end	
 	if Config.StartWhenDeath then
 		while true do
 		Wait(500)		
@@ -74,18 +84,7 @@ RegisterNetEvent('CoffinDance:SpawnPeds')
 AddEventHandler('CoffinDance:SpawnPeds', function(coords, type, coffNet, pedNet, pedNet2, pedNet3, pedNet4, pedNet5, pedNet6, mainPedNet)
 	local playerPed = PlayerPedId()
 	local myCoords = GetEntityCoords(playerPed)
-	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 30.0 then
-		local playerPed = PlayerPedId()		
-		local pedModel = GetHashKey(Config.DancerPedModel)
-		local coffinModel = GetHashKey(Config.CoffinModel)		
-		RequestModel(coffinModel)
-		while not HasModelLoaded(coffinModel) do
-			Citizen.Wait(1)
-		end		
-		RequestModel(pedModel)
-		while not HasModelLoaded(pedModel) do
-			Citizen.Wait(1)
-		end		
+	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 30.0 then		
 		globalCoffNet = coffNet; globalPedNet = pedNet; globalPedNet2 = pedNet2; globalPedNet3 = pedNet3; globalPedNet4 = pedNet4; globalPedNet5 = pedNet5; globalPedNet6 = pedNet6
 		globalMainPed = mainPedNet
 		coffin = NetToObj(globalCoffNet)
@@ -95,13 +94,13 @@ AddEventHandler('CoffinDance:SpawnPeds', function(coords, type, coffNet, pedNet,
 		SetPedState(mainPed);SetPedState(ped);SetPedState(ped2);SetPedState(ped3);SetPedState(ped4);SetPedState(ped5);SetPedState(ped6)
 		PedDancing(ped);PedDancing(ped2);PedDancing(ped3);PedDancing(ped4);PedDancing(ped5);PedDancing(ped6)			
 		Citizen.Wait(200)	
-		AttachEntityToEntity(coffin, mainPed, 28422, 0.0, -1.05, 0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)
-		AttachEntityToEntity(ped, coffin, 28422, -0.6, -0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)
-		AttachEntityToEntity(ped2, coffin, 28422, 0.6, 0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)
-		AttachEntityToEntity(ped3, coffin, 28422, -0.6, 0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)
-		AttachEntityToEntity(ped4, coffin, 28422, 0.6, -0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)	
-		AttachEntityToEntity(ped5, coffin, 28422, 0.6, 0.0, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)	
-		AttachEntityToEntity(ped6, coffin, 28422, -0.6, -0.0, -0.95, 1.0, 0.0, -1.4, 1, 1, 0, true, 2, 1)	
+		AttachEntityToEntity(coffin, mainPed, 28422, 0.0, -1.05, 0.95, 1.0, 0.0, -1.4, 1, 1, true, true, 2, 1)
+		AttachEntityToEntity(ped, coffin, 28422, -0.6, -0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)
+		AttachEntityToEntity(ped2, coffin, 28422, 0.6, 0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)
+		AttachEntityToEntity(ped3, coffin, 28422, -0.6, 0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)
+		AttachEntityToEntity(ped4, coffin, 28422, 0.6, -0.75, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)	
+		AttachEntityToEntity(ped5, coffin, 28422, 0.6, 0.0, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)	
+		AttachEntityToEntity(ped6, coffin, 28422, -0.6, -0.0, -0.95, 1.0, 0.0, -1.4, 1, 1, true, false, 2, 1)	
 		Wait(1000)
 		PedDancing(ped);PedDancing(ped2);PedDancing(ped3);PedDancing(ped4);PedDancing(ped5);PedDancing(ped6)
 		if type == "Death" then				
