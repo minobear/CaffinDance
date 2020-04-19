@@ -74,7 +74,7 @@ RegisterNetEvent('CoffinDance:SpawnPeds')
 AddEventHandler('CoffinDance:SpawnPeds', function(coords, type, coffNet, pedNet, pedNet2, pedNet3, pedNet4, pedNet5, pedNet6, mainPedNet)
 	local playerPed = PlayerPedId()
 	local myCoords = GetEntityCoords(playerPed)
-	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 50.0 then
+	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 30.0 then
 		local playerPed = PlayerPedId()		
 		local pedModel = GetHashKey(Config.DancerPedModel)
 		local coffinModel = GetHashKey(Config.CoffinModel)		
@@ -117,6 +117,8 @@ end)
 
 RegisterNetEvent('CoffinDance:endCoffinDance')
 AddEventHandler('CoffinDance:endCoffinDance', function(coffNet, pedNet, pedNet2, pedNet3, pedNet4, pedNet5, pedNet6, mainPedNet)
+	local playerPed = PlayerPedId()
+	local myCoords = GetEntityCoords(playerPed)
 	local coffinObj = NetToObj(coffNet)
 	local pedObj = NetToPed(pedNet); local pedObj2 = NetToPed(pedNet2); local pedObj3 = NetToPed(pedNet3); local pedObj4 = NetToPed(pedNet4); local pedObj5 = NetToPed(pedNet5); local pedObj6 = NetToPed(pedNet6)		
 	local mainPedObj = NetToPed(mainPedNet)	
