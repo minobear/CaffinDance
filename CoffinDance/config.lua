@@ -9,3 +9,5 @@ Config.PlayMusicDistance = 8.0 -- Config.PlayMusicOnlyOnSelf need false
 
 Config.DancerPedModel = "s_m_m_strpreach_01"
 Config.CoffinModel = "prop_coffin_01"
+Config.AnimationBase = "anim@amb@casino@mini@dance@dance_solo@female@var_b@"
+Config.AnimationName = "high_center"

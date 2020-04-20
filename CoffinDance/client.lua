@@ -22,16 +22,6 @@ end
 
 
 Citizen.CreateThread(function()
-	local pedModel = GetHashKey(Config.DancerPedModel)
-	local coffinModel = GetHashKey(Config.CoffinModel)		
-	RequestModel(coffinModel)
-	while not HasModelLoaded(coffinModel) do
-		Citizen.Wait(1)
-	end		
-	RequestModel(pedModel)
-	while not HasModelLoaded(pedModel) do
-		Citizen.Wait(1)
-	end	
 	if Config.StartWhenDeath then
 		while true do
 		Wait(500)		
@@ -43,9 +33,9 @@ Citizen.CreateThread(function()
 					else
 						TriggerServerEvent('InteractSound_SV:PlayWithinDistance', Config.PlayMusicDistance, 'CoffinDance', 0.2)
 					end
-				end						
+				end			
 				StartCoffinDance("Death")			
-			elseif (isDead and NetworkIsPlayerActive(PlayerId()) and not IsPedFatallyInjured(PlayerPedId())) and not Config.AutoClearWhenMusicEnd then
+			elseif (isDead and NetworkIsPlayerActive(PlayerId()) and not IsPedFatallyInjured(PlayerPedId())) then
 				isDead = false	
 				if not Config.AutoClearWhenMusicEnd then
 					TriggerServerEvent("CoffinDance:syncEndCoffinDance", globalCoffNet, globalPedNet, globalPedNet2, globalPedNet3, globalPedNet4, globalPedNet5, globalPedNet6, globalMainPed)		
@@ -60,6 +50,14 @@ function StartCoffinDance(type)
 	local coords = GetEntityCoords(playerPed)
 	local coffinModel = GetHashKey(Config.CoffinModel)
 	local pedModel = GetHashKey(Config.DancerPedModel)
+	RequestModel(coffinModel)
+	while not HasModelLoaded(coffinModel) do
+		Citizen.Wait(1)
+	end		
+	RequestModel(pedModel)
+	while not HasModelLoaded(pedModel) do
+		Citizen.Wait(1)
+	end		
 	local coffinObj = CreateObject(coffinModel, 1.0, 1.0, 1.0, 1, 1, 0)
 	if type == "Death" then
 		Wait(1000)
@@ -84,13 +82,24 @@ RegisterNetEvent('CoffinDance:SpawnPeds')
 AddEventHandler('CoffinDance:SpawnPeds', function(coords, type, coffNet, pedNet, pedNet2, pedNet3, pedNet4, pedNet5, pedNet6, mainPedNet)
 	local playerPed = PlayerPedId()
 	local myCoords = GetEntityCoords(playerPed)
-	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 30.0 then		
+	if Vdist(coords.x, coords.y, coords.z, myCoords.x, myCoords.y, myCoords.z) < 30.0 then
+		local pedModel = GetHashKey(Config.DancerPedModel)
+		local coffinModel = GetHashKey(Config.CoffinModel)		
+		RequestModel(coffinModel)
+		while not HasModelLoaded(coffinModel) do
+			Citizen.Wait(1)
+		end		
+		RequestModel(pedModel)
+		while not HasModelLoaded(pedModel) do
+			Citizen.Wait(1)
+		end		
 		globalCoffNet = coffNet; globalPedNet = pedNet; globalPedNet2 = pedNet2; globalPedNet3 = pedNet3; globalPedNet4 = pedNet4; globalPedNet5 = pedNet5; globalPedNet6 = pedNet6
 		globalMainPed = mainPedNet
 		coffin = NetToObj(globalCoffNet)
 		ped = NetToPed(globalPedNet); ped2 = NetToPed(globalPedNet2); ped3 = NetToPed(globalPedNet3); ped4 = NetToPed(globalPedNet4); ped5 = NetToPed(globalPedNet5); ped6 = NetToPed(globalPedNet6)				
 		mainPed = NetToPed(globalMainPed)
 		SetEntityVisible(mainPed, false, false)
+--		print("0: "..coffNet, "1: "..pedNet, "2: "..pedNet2, "3: "..pedNet3, "4: "..pedNet4, "5: "..pedNet5, "6: "..pedNet6, "7: "..mainPedNet, "\n0: "..coffin, "1: "..ped, "2: "..ped2, "3: "..ped3, "4: "..ped4, "5: "..ped5, "6: "..ped6, "7: "..mainPed)
 		SetPedState(mainPed);SetPedState(ped);SetPedState(ped2);SetPedState(ped3);SetPedState(ped4);SetPedState(ped5);SetPedState(ped6)
 		PedDancing(ped);PedDancing(ped2);PedDancing(ped3);PedDancing(ped4);PedDancing(ped5);PedDancing(ped6)			
 		Citizen.Wait(200)	
@@ -127,7 +136,7 @@ end)
 
 function SetPedState(thePed)
 	local playerPed = PlayerId()	
-	local GroupHandle = GetPlayerGroup(PlayerId())
+	local GroupHandle = GetPlayerGroup(playerPed)
 	SetEntityNoCollisionEntity(thePed, PlayerPedId())
 	SetEntityInvincible(thePed, true)
 	SetPedCanBeTargetted(thePed, false)
@@ -138,8 +147,8 @@ function SetPedState(thePed)
 end
 
 function PedDancing(thePed)
-	local aniBase = "anim@amb@casino@mini@dance@dance_solo@female@var_b@"
-	local ani = "high_center"
+	local aniBase = Config.AnimationBase
+	local ani = Config.AnimationName
 	RequestAnimDict(aniBase)
 	while not HasAnimDictLoaded(aniBase) do
 		Citizen.Wait(1)
